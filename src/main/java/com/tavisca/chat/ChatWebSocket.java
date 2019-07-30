@@ -12,25 +12,29 @@ import java.io.IOException;
 
 public class ChatWebSocket {
 
+    private ChatHelper chatHelper;
+
+    public ChatWebSocket(){
+        this.chatHelper = new ChatHelper();
+    }
 
     @OnOpen
     public void onOpen(Session session){
         System.out.println("Open connection: " + session.getId());
+        ChatHelper.sessionMap.put(session.getId(), session);
     }
 
     @OnClose
     public void onClose(Session session){
         System.out.println("Closing connection: " + session.getId());
+        ChatHelper.sessionMap.remove(session.getId());
     }
 
     @OnMessage
     public void onMessage(String message, Session session)  {
         System.out.println("Recieved message from: " + session.getId() + " Message is " + message );
+            chatHelper.sendMessage(message, session.getId());
 
-        try {
-            session.getBasicRemote().sendText(message.toUpperCase());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 }
