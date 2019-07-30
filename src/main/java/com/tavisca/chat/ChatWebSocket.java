@@ -1,8 +1,5 @@
 package com.tavisca.chat;
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 
@@ -44,7 +41,10 @@ public class ChatWebSocket {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        t1.interrupt();
+        finally {
+            t1.interrupt();
+        }
+
         ChatHelper.sessionMap.remove(session.getId());
     }
 
@@ -52,6 +52,12 @@ public class ChatWebSocket {
     public void onMessage(String message, Session session)  {
         System.out.println("Recieved message from: " + session.getId() + " Message is " + message );
             chatHelper.sendMessage(message, session.getId());
+    }
+
+    @OnError
+    public void onError(Session session, Throwable t){
+        System.out.println("An Error occured");
+        System.out.println(t.getStackTrace());
     }
 
 }
