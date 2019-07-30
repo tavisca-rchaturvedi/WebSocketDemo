@@ -21,12 +21,24 @@ public class ChatWebSocket {
     @OnOpen
     public void onOpen(Session session){
         System.out.println("Open connection: " + session.getId());
+
+        try {
+            session.getBasicRemote().sendText("Your Session Id is: " + session.getId());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         ChatHelper.sessionMap.put(session.getId(), session);
     }
 
     @OnClose
     public void onClose(Session session){
         System.out.println("Closing connection: " + session.getId());
+        try {
+            session.getBasicRemote().sendText("Your Session with SessionId " + session.getId() + " is closed");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ChatHelper.sessionMap.remove(session.getId());
     }
 
