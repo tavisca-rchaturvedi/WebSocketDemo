@@ -16,6 +16,7 @@ public class ChatWebSocket {
 
     public ChatWebSocket(){
         this.chatHelper = new ChatHelper();
+
     }
 
     @OnOpen
@@ -27,6 +28,9 @@ public class ChatWebSocket {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Thread t1 = new Thread(this.chatHelper,session.getId());
+        t1.start();
 
         ChatHelper.sessionMap.put(session.getId(), session);
     }
@@ -46,7 +50,6 @@ public class ChatWebSocket {
     public void onMessage(String message, Session session)  {
         System.out.println("Recieved message from: " + session.getId() + " Message is " + message );
             chatHelper.sendMessage(message, session.getId());
-
-
     }
+
 }
