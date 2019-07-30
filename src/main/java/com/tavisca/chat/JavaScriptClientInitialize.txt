@@ -1,0 +1,1 @@
+var client1 = new WebSocketClient('ws', '127.0.0.1', 8080, '/ChatApp/endpoint');
