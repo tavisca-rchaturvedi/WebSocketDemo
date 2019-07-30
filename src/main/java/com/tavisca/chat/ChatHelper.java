@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 public class ChatHelper implements Runnable{
     public static HashMap<String, Session> sessionMap = new HashMap<>();
+    private volatile boolean runningThread = true;
     public void sendMessage(String message, String senderId) {
         Pattern pattern = Pattern.compile("@([0-9]*)(\\s*:\\s*)(.*)");
         Matcher matcher = pattern.matcher(message);
@@ -36,12 +37,16 @@ public class ChatHelper implements Runnable{
     @Override
     public void run() {
         try {
-            while(true){
+            while(runningThread){
                 Thread.sleep(5000);
                 this.routineMessage("Routine Message from server by thread " + Thread.currentThread().getId(), Thread.currentThread().getName() );
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void stop(){
+        this.runningThread = false;
     }
 }
