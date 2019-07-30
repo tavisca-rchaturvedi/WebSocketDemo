@@ -13,6 +13,7 @@ import java.io.IOException;
 public class ChatWebSocket {
 
     private ChatHelper chatHelper;
+    public Thread t1;
 
     public ChatWebSocket(){
         this.chatHelper = new ChatHelper();
@@ -29,7 +30,7 @@ public class ChatWebSocket {
             e.printStackTrace();
         }
 
-        Thread t1 = new Thread(this.chatHelper,session.getId());
+        t1 = new Thread(this.chatHelper,session.getId());
         t1.start();
 
         ChatHelper.sessionMap.put(session.getId(), session);
@@ -43,6 +44,7 @@ public class ChatWebSocket {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        t1.interrupt();
         ChatHelper.sessionMap.remove(session.getId());
     }
 
